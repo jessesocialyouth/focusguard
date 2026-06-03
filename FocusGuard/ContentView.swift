@@ -217,6 +217,9 @@ struct ContentView: View {
     // MARK: - Permission logic
 
     private func triggerAccessibilityPrompt() {
+        // Registers the app in the Accessibility list (prompt won't show in sandbox, but registration happens)
+        let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
+        AXIsProcessTrustedWithOptions(options)
         waitingForUser = true
         NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility")!)
         startPolling()
