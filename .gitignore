@@ -1,3 +1,6 @@
+# API key — never commit the real key
+FocusGuard/Secrets.swift
+
 # Xcode
 *.xcworkspace/xcuserdata
 *.xcodeproj/xcuserdata

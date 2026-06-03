@@ -6,6 +6,29 @@
 	objectVersion = 56;
 	objects = {
 
+/* Begin PBXShellScriptBuildPhase section */
+		FG0038 /* Generate Secrets.swift if missing */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/FocusGuard/Secrets.swift.template",
+			);
+			name = "Generate Secrets.swift if missing";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "SECRETS=\"${SRCROOT}/FocusGuard/Secrets.swift\"\nTEMPLATE=\"${SRCROOT}/FocusGuard/Secrets.swift.template\"\nif [ ! -f \"$SECRETS\" ]; then\n  cp \"$TEMPLATE\" \"$SECRETS\"\n  echo \"Created Secrets.swift from template. Add your API key to ${SECRETS}\"\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXBuildFile section */
 		FG0007 /* FocusGuardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FG0002 /* FocusGuardApp.swift */; };
 		FG0008 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FG0003 /* ContentView.swift */; };
@@ -79,6 +102,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = FG0021 /* Build configuration list for PBXNativeTarget "FocusGuard" */;
 			buildPhases = (
+				FG0038 /* Generate Secrets.swift if missing */,
 				FG0014 /* Sources */,
 				FG0015 /* Resources */,
 			);
