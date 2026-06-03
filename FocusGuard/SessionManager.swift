@@ -12,14 +12,17 @@ class SessionManager: ObservableObject {
     @Published var elapsed: TimeInterval = 0
     @Published var focusScore: Int = 100
 
-    @Published var activeAppName: String = ""
-    @Published var activeWindowTitle: String = ""
-
+    @Published var activeContext: ActivityContext?
+    @Published var distractionContext: ActivityContext?
     @Published var isDistracted: Bool = false
-    @Published var distractionAppName: String = ""
+
+    // Convenience accessors for views
+    var activeAppName: String { activeContext?.appName ?? "" }
+    var activeWindowTitle: String { activeContext?.windowTitle ?? "" }
+    var distractionAppName: String { distractionContext?.appName ?? "" }
 
     private var focusAppBundleID: String = ""
-    private var focusAppName: String = ""
+    private var contextStartTime: Date = Date()
 
     private var sessionTimer: Timer?
     private var distractionTimer: Timer?
@@ -34,15 +37,16 @@ class SessionManager: ObservableObject {
         elapsed = 0
         focusScore = 100
         isDistracted = false
+        distractionContext = nil
 
         if let current = NSWorkspace.shared.frontmostApplication {
             focusAppBundleID = current.bundleIdentifier ?? ""
-            focusAppName = current.localizedName ?? ""
         }
 
         state = .running
         sessionTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
             self?.elapsed += 1
+            self?.tickActiveContext()
         }
         startAppTracking()
     }
@@ -61,10 +65,9 @@ class SessionManager: ObservableObject {
         task = ""
         elapsed = 0
         focusScore = 100
-        activeAppName = ""
-        activeWindowTitle = ""
+        activeContext = nil
+        distractionContext = nil
         isDistracted = false
-        distractionAppName = ""
         state = .idle
     }
 
@@ -87,7 +90,7 @@ class SessionManager: ObservableObject {
 
     private func startAppTracking() {
         if let current = NSWorkspace.shared.frontmostApplication {
-            updateActive(app: current)
+            setContext(for: current)
         }
         appObserver = NSWorkspace.shared.notificationCenter.addObserver(
             forName: NSWorkspace.didActivateApplicationNotification,
@@ -95,7 +98,7 @@ class SessionManager: ObservableObject {
             queue: .main
         ) { [weak self] notification in
             guard let app = notification.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication else { return }
-            self?.updateActive(app: app)
+            self?.setContext(for: app)
         }
     }
 
@@ -104,13 +107,19 @@ class SessionManager: ObservableObject {
             NSWorkspace.shared.notificationCenter.removeObserver(obs)
         }
         appObserver = nil
-        activeAppName = ""
-        activeWindowTitle = ""
+        activeContext = nil
     }
 
-    private func updateActive(app: NSRunningApplication) {
-        activeAppName = app.localizedName ?? app.bundleIdentifier ?? "Unknown"
-        activeWindowTitle = windowTitle(for: app.processIdentifier)
+    private func setContext(for app: NSRunningApplication) {
+        contextStartTime = Date()
+        activeContext = ActivityContext(
+            appName: app.localizedName ?? app.bundleIdentifier ?? "Unknown",
+            bundleID: app.bundleIdentifier ?? "",
+            windowTitle: windowTitle(for: app.processIdentifier),
+            url: nil,
+            timestamp: Date(),
+            elapsedInContext: 0
+        )
 
         guard state == .running else { return }
 
@@ -120,13 +129,21 @@ class SessionManager: ObservableObject {
         if isFocusApp || isSelf {
             cancelDistractionTimer()
         } else if !isDistracted {
-            startDistractionTimer(appName: activeAppName)
+            startDistractionTimer(context: activeContext!)
         }
     }
 
-    private func startDistractionTimer(appName: String) {
+    private func tickActiveContext() {
+        guard var ctx = activeContext else { return }
+        ctx.elapsedInContext = Date().timeIntervalSince(contextStartTime)
+        activeContext = ctx
+    }
+
+    // MARK: - Distraction timer
+
+    private func startDistractionTimer(context: ActivityContext) {
         distractionTimer?.invalidate()
-        distractionAppName = appName
+        distractionContext = context
         distractionTimer = Timer.scheduledTimer(
             withTimeInterval: Self.distractionGrace,
             repeats: false
@@ -138,7 +155,7 @@ class SessionManager: ObservableObject {
     private func cancelDistractionTimer() {
         distractionTimer?.invalidate()
         distractionTimer = nil
-        distractionAppName = ""
+        distractionContext = nil
     }
 
     // MARK: - Window title
