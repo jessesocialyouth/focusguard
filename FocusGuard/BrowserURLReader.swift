@@ -20,10 +20,9 @@ struct BrowserURLReader {
         let axApp = AXUIElementCreateApplication(app.processIdentifier)
         var windowRef: CFTypeRef?
         guard AXUIElementCopyAttributeValue(axApp, kAXFocusedWindowAttribute as CFString, &windowRef) == .success,
-              let windowRef,
-              let axWindow = windowRef as? AXUIElement else { return nil }
+              let windowRef else { return nil }
 
-        return findURLField(in: axWindow, depth: 0)
+        return findURLField(in: windowRef as! AXUIElement, depth: 0)
     }
 
     // Depth-limited AX tree search for the address bar
