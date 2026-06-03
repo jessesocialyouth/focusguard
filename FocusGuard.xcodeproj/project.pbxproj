@@ -14,6 +14,7 @@
 		FG0026 /* MenuBarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FG0024 /* MenuBarManager.swift */; };
 		FG0027 /* DistractionPopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FG0025 /* DistractionPopoverView.swift */; };
 		FG0029 /* ActivityContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = FG0028 /* ActivityContext.swift */; };
+		FG0031 /* BrowserURLReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FG0030 /* BrowserURLReader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		FG0024 /* MenuBarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarManager.swift; sourceTree = "<group>"; };
 		FG0025 /* DistractionPopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistractionPopoverView.swift; sourceTree = "<group>"; };
 		FG0028 /* ActivityContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityContext.swift; sourceTree = "<group>"; };
+		FG0030 /* BrowserURLReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserURLReader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -48,6 +50,7 @@
 				FG0024 /* MenuBarManager.swift */,
 				FG0025 /* DistractionPopoverView.swift */,
 				FG0028 /* ActivityContext.swift */,
+				FG0030 /* BrowserURLReader.swift */,
 			);
 			path = FocusGuard;
 			sourceTree = "<group>";
@@ -134,6 +137,7 @@
 				FG0026 /* MenuBarManager.swift in Sources */,
 				FG0027 /* DistractionPopoverView.swift in Sources */,
 				FG0029 /* ActivityContext.swift in Sources */,
+				FG0031 /* BrowserURLReader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -144,8 +144,9 @@ struct ContentView: View {
                     Text(session.activeAppName)
                         .fontWeight(.medium)
                 }
-                if !session.activeWindowTitle.isEmpty {
-                    Text(session.activeWindowTitle)
+                let detail = session.activeContext?.displayDetail ?? ""
+                if !detail.isEmpty {
+                    Text(detail)
                         .foregroundStyle(.secondary)
                         .font(.caption)
                         .lineLimit(1)

@@ -116,7 +116,7 @@ class SessionManager: ObservableObject {
             appName: app.localizedName ?? app.bundleIdentifier ?? "Unknown",
             bundleID: app.bundleIdentifier ?? "",
             windowTitle: windowTitle(for: app.processIdentifier),
-            url: nil,
+            url: BrowserURLReader.readURL(from: app),
             timestamp: Date(),
             elapsedInContext: 0
         )
