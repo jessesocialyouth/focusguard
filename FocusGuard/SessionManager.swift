@@ -58,7 +58,7 @@ class SessionManager: ObservableObject {
     // MARK: - Accessibility
 
     func requestAccessibility() {
-        let options = [kAXTrustedCheckOptionPrompt: true] as CFDictionary
+        let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
         isAccessibilityGranted = AXIsProcessTrustedWithOptions(options)
     }
 
