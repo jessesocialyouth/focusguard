@@ -19,6 +19,7 @@
 		FG0004 /* SessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManager.swift; sourceTree = "<group>"; };
 		FG0005 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FG0006 /* FocusGuard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FocusGuard.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FG0023 /* FocusGuard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FocusGuard.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -37,6 +38,7 @@
 				FG0003 /* ContentView.swift */,
 				FG0004 /* SessionManager.swift */,
 				FG0005 /* Assets.xcassets */,
+				FG0023 /* FocusGuard.entitlements */,
 			);
 			path = FocusGuard;
 			sourceTree = "<group>";
@@ -130,6 +132,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = FocusGuard/FocusGuard.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -154,6 +157,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = FocusGuard/FocusGuard.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
