@@ -65,6 +65,10 @@ class SessionManager: ObservableObject {
     }
 
     func reset() {
+        classifyTimer?.invalidate()
+        classifyTimer = nil
+        distractionTimer?.invalidate()
+        distractionTimer = nil
         task = ""
         elapsed = 0
         focusScore = 100
@@ -131,8 +135,8 @@ class SessionManager: ObservableObject {
 
         if isFocusApp || isSelf {
             cancelDistractionTimer()
-        } else if !isDistracted {
-            startDistractionTimer(context: activeContext!)
+        } else if !isDistracted, let ctx = activeContext {
+            startDistractionTimer(context: ctx)
         }
 
         scheduleClassification()
@@ -196,7 +200,7 @@ class SessionManager: ObservableObject {
         var windowRef: CFTypeRef?
         guard AXUIElementCopyAttributeValue(axApp, kAXFocusedWindowAttribute as CFString, &windowRef) == .success,
               let windowRef else { return "" }
-        let axWindow = windowRef as! AXUIElement
+        guard let axWindow = windowRef as? AXUIElement else { return "" }
         var titleRef: CFTypeRef?
         guard AXUIElementCopyAttributeValue(axWindow, kAXTitleAttribute as CFString, &titleRef) == .success,
               let title = titleRef as? String else { return "" }
