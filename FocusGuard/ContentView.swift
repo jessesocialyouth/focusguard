@@ -3,15 +3,19 @@ import ApplicationServices
 
 struct ContentView: View {
     @ObservedObject var session: SessionManager
+    @ObservedObject private var keyStore = APIKeyStore.shared
     @State private var accessibilityGranted = AXIsProcessTrusted()
     @State private var pollTimer: Timer?
     @State private var waitingForUser = false
+    @State private var apiKeyInput = ""
 
     var body: some View {
-        if accessibilityGranted {
-            mainView
-        } else {
+        if !accessibilityGranted {
             onboardingView
+        } else if !keyStore.hasKey {
+            apiKeyView
+        } else {
+            mainView
         }
     }
 
@@ -56,6 +60,44 @@ struct ContentView: View {
         .onDisappear {
             pollTimer?.invalidate()
         }
+    }
+
+    // MARK: - API Key setup
+
+    private var apiKeyView: some View {
+        VStack(spacing: 24) {
+            Image(systemName: "key.fill")
+                .font(.system(size: 48))
+                .foregroundStyle(.purple)
+
+            VStack(spacing: 8) {
+                Text("Connect AI Classification")
+                    .font(.title2)
+                    .fontWeight(.bold)
+
+                Text("FocusGuard uses Claude to understand what you're working on and whether your current activity supports it.")
+                    .font(.body)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+            }
+
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Anthropic API Key")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                SecureField("sk-ant-api03-...", text: $apiKeyInput)
+                    .textFieldStyle(.roundedBorder)
+            }
+
+            Button("Save & Continue") {
+                APIKeyStore.shared.save(apiKeyInput)
+            }
+            .buttonStyle(.borderedProminent)
+            .controlSize(.large)
+            .disabled(apiKeyInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+        }
+        .padding(40)
+        .frame(minWidth: 420, minHeight: 360)
     }
 
     // MARK: - Main

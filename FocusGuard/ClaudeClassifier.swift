@@ -3,7 +3,7 @@ import Foundation
 actor ClaudeClassifier {
     static let shared = ClaudeClassifier()
 
-    private let apiKey = Secrets.anthropicAPIKey
+    private var apiKey: String { APIKeyStore.shared.apiKey }
     private let model = "claude-haiku-4-5-20251001"
     private var cache: [String: ClassificationResult] = [:]
 

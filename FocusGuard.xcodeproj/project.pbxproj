@@ -6,29 +6,6 @@
 	objectVersion = 56;
 	objects = {
 
-/* Begin PBXShellScriptBuildPhase section */
-		FG0038 /* Generate Secrets.swift if missing */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/FocusGuard/Secrets.swift.template",
-			);
-			name = "Generate Secrets.swift if missing";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "SECRETS=\"${SRCROOT}/FocusGuard/Secrets.swift\"\nTEMPLATE=\"${SRCROOT}/FocusGuard/Secrets.swift.template\"\nif [ ! -f \"$SECRETS\" ]; then\n  cp \"$TEMPLATE\" \"$SECRETS\"\n  echo \"Created Secrets.swift from template. Add your API key to ${SECRETS}\"\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXBuildFile section */
 		FG0007 /* FocusGuardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FG0002 /* FocusGuardApp.swift */; };
 		FG0008 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FG0003 /* ContentView.swift */; };
@@ -40,7 +17,7 @@
 		FG0031 /* BrowserURLReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FG0030 /* BrowserURLReader.swift */; };
 		FG0033 /* ClaudeClassifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = FG0032 /* ClaudeClassifier.swift */; };
 		FG0035 /* UsageTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FG0034 /* UsageTracker.swift */; };
-		FG0037 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = FG0036 /* Secrets.swift */; };
+		FG0039 /* APIKeyStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FG0040 /* APIKeyStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,7 +33,7 @@
 		FG0030 /* BrowserURLReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserURLReader.swift; sourceTree = "<group>"; };
 		FG0032 /* ClaudeClassifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeClassifier.swift; sourceTree = "<group>"; };
 		FG0034 /* UsageTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageTracker.swift; sourceTree = "<group>"; };
-		FG0036 /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
+		FG0040 /* APIKeyStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKeyStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -82,7 +59,7 @@
 				FG0030 /* BrowserURLReader.swift */,
 				FG0032 /* ClaudeClassifier.swift */,
 				FG0034 /* UsageTracker.swift */,
-				FG0036 /* Secrets.swift */,
+				FG0040 /* APIKeyStore.swift */,
 			);
 			path = FocusGuard;
 			sourceTree = "<group>";
@@ -102,7 +79,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = FG0021 /* Build configuration list for PBXNativeTarget "FocusGuard" */;
 			buildPhases = (
-				FG0038 /* Generate Secrets.swift if missing */,
 				FG0014 /* Sources */,
 				FG0015 /* Resources */,
 			);
@@ -173,7 +149,7 @@
 				FG0031 /* BrowserURLReader.swift in Sources */,
 				FG0033 /* ClaudeClassifier.swift in Sources */,
 				FG0035 /* UsageTracker.swift in Sources */,
-				FG0037 /* Secrets.swift in Sources */,
+				FG0039 /* APIKeyStore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
