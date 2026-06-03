@@ -29,7 +29,6 @@ class SessionManager: ObservableObject {
         sessionTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
             self?.elapsed += 1
         }
-        requestAccessibility()
         startAppTracking()
     }
 
@@ -53,13 +52,6 @@ class SessionManager: ObservableObject {
         let m = Int(elapsed) / 60
         let s = Int(elapsed) % 60
         return String(format: "%02d:%02d", m, s)
-    }
-
-    // MARK: - Accessibility
-
-    func requestAccessibility() {
-        let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
-        isAccessibilityGranted = AXIsProcessTrustedWithOptions(options)
     }
 
     // MARK: - App tracking

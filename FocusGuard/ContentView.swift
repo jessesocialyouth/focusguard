@@ -1,9 +1,66 @@
 import SwiftUI
+import ApplicationServices
 
 struct ContentView: View {
     @StateObject private var session = SessionManager()
+    @State private var accessibilityGranted = AXIsProcessTrusted()
+    @State private var pollTimer: Timer?
+    @State private var waitingForUser = false
 
     var body: some View {
+        if accessibilityGranted {
+            mainView
+        } else {
+            onboardingView
+        }
+    }
+
+    // MARK: - Onboarding
+
+    private var onboardingView: some View {
+        VStack(spacing: 24) {
+            Image(systemName: "accessibility")
+                .font(.system(size: 52))
+                .foregroundStyle(.blue)
+
+            VStack(spacing: 8) {
+                Text("Accessibility Access Required")
+                    .font(.title2)
+                    .fontWeight(.bold)
+
+                Text("FocusGuard watches which app and window you're using to track whether you stay on task.\n\nThis requires Accessibility access.")
+                    .font(.body)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+            }
+
+            if waitingForUser {
+                VStack(spacing: 8) {
+                    ProgressView()
+                        .controlSize(.small)
+                    Text("Enable FocusGuard in:\nSystem Settings → Privacy & Security → Accessibility")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                }
+            } else {
+                Button("Grant Access") {
+                    triggerAccessibilityPrompt()
+                }
+                .buttonStyle(.borderedProminent)
+                .controlSize(.large)
+            }
+        }
+        .padding(40)
+        .frame(minWidth: 420, minHeight: 340)
+        .onDisappear {
+            pollTimer?.invalidate()
+        }
+    }
+
+    // MARK: - Main
+
+    private var mainView: some View {
         VStack(spacing: 24) {
             Text("FocusGuard")
                 .font(.largeTitle)
@@ -95,14 +152,6 @@ struct ContentView: View {
                         .truncationMode(.middle)
                 }
             }
-
-            if !session.isAccessibilityGranted {
-                Text("Grant Accessibility in System Settings to see window titles")
-                    .font(.caption)
-                    .foregroundStyle(.orange)
-                    .multilineTextAlignment(.center)
-                    .padding(.top, 2)
-            }
         }
     }
 
@@ -127,6 +176,25 @@ struct ContentView: View {
                 session.reset()
             }
             .buttonStyle(.borderedProminent)
+        }
+    }
+
+    // MARK: - Permission logic
+
+    private func triggerAccessibilityPrompt() {
+        let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
+        AXIsProcessTrustedWithOptions(options)
+        waitingForUser = true
+        startPolling()
+    }
+
+    private func startPolling() {
+        pollTimer?.invalidate()
+        pollTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+            if AXIsProcessTrusted() {
+                pollTimer?.invalidate()
+                accessibilityGranted = true
+            }
         }
     }
 }
