@@ -14,10 +14,18 @@ class SessionManager: ObservableObject {
 
     @Published var activeAppName: String = ""
     @Published var activeWindowTitle: String = ""
-    @Published var isAccessibilityGranted: Bool = false
+
+    @Published var isDistracted: Bool = false
+    @Published var distractionAppName: String = ""
+
+    private var focusAppBundleID: String = ""
+    private var focusAppName: String = ""
 
     private var sessionTimer: Timer?
+    private var distractionTimer: Timer?
     private var appObserver: NSObjectProtocol?
+
+    static let distractionGrace: TimeInterval = 30
 
     // MARK: - Session control
 
@@ -25,6 +33,13 @@ class SessionManager: ObservableObject {
         guard !task.trimmingCharacters(in: .whitespaces).isEmpty else { return }
         elapsed = 0
         focusScore = 100
+        isDistracted = false
+
+        if let current = NSWorkspace.shared.frontmostApplication {
+            focusAppBundleID = current.bundleIdentifier ?? ""
+            focusAppName = current.localizedName ?? ""
+        }
+
         state = .running
         sessionTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
             self?.elapsed += 1
@@ -35,7 +50,10 @@ class SessionManager: ObservableObject {
     func end() {
         sessionTimer?.invalidate()
         sessionTimer = nil
+        distractionTimer?.invalidate()
+        distractionTimer = nil
         stopAppTracking()
+        isDistracted = false
         state = .ended
     }
 
@@ -45,7 +63,18 @@ class SessionManager: ObservableObject {
         focusScore = 100
         activeAppName = ""
         activeWindowTitle = ""
+        isDistracted = false
+        distractionAppName = ""
         state = .idle
+    }
+
+    func answerDistraction(related: Bool) {
+        if !related {
+            focusScore = max(0, focusScore - 10)
+        }
+        isDistracted = false
+        distractionTimer?.invalidate()
+        distractionTimer = nil
     }
 
     var elapsedFormatted: String {
@@ -82,8 +111,37 @@ class SessionManager: ObservableObject {
     private func updateActive(app: NSRunningApplication) {
         activeAppName = app.localizedName ?? app.bundleIdentifier ?? "Unknown"
         activeWindowTitle = windowTitle(for: app.processIdentifier)
-        isAccessibilityGranted = AXIsProcessTrusted()
+
+        guard state == .running else { return }
+
+        let isSelf = app.bundleIdentifier == Bundle.main.bundleIdentifier
+        let isFocusApp = app.bundleIdentifier == focusAppBundleID
+
+        if isFocusApp || isSelf {
+            cancelDistractionTimer()
+        } else if !isDistracted {
+            startDistractionTimer(appName: activeAppName)
+        }
     }
+
+    private func startDistractionTimer(appName: String) {
+        distractionTimer?.invalidate()
+        distractionAppName = appName
+        distractionTimer = Timer.scheduledTimer(
+            withTimeInterval: Self.distractionGrace,
+            repeats: false
+        ) { [weak self] _ in
+            self?.isDistracted = true
+        }
+    }
+
+    private func cancelDistractionTimer() {
+        distractionTimer?.invalidate()
+        distractionTimer = nil
+        distractionAppName = ""
+    }
+
+    // MARK: - Window title
 
     private func windowTitle(for pid: pid_t) -> String {
         guard AXIsProcessTrusted() else { return "" }

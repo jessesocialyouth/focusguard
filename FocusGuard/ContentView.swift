@@ -124,6 +124,10 @@ struct ContentView: View {
 
             activeAppView
 
+            if session.isDistracted {
+                distractionBanner
+            }
+
             Button("End Session") {
                 session.end()
             }
@@ -153,6 +157,37 @@ struct ContentView: View {
                 }
             }
         }
+    }
+
+    // MARK: - Distraction banner
+
+    private var distractionBanner: some View {
+        VStack(spacing: 8) {
+            Text("You've been in \(session.distractionAppName) for 30s")
+                .font(.subheadline)
+                .fontWeight(.medium)
+            Text("Is this related to \"\(session.task)\"?")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            HStack(spacing: 12) {
+                Button("Yes, it is") {
+                    session.answerDistraction(related: true)
+                }
+                .buttonStyle(.bordered)
+                Button("No, going back") {
+                    session.answerDistraction(related: false)
+                }
+                .buttonStyle(.borderedProminent)
+            }
+        }
+        .padding(12)
+        .frame(maxWidth: .infinity)
+        .background(.orange.opacity(0.1))
+        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .strokeBorder(.orange.opacity(0.3), lineWidth: 1)
+        )
     }
 
     // MARK: - Ended
