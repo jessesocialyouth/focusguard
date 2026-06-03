@@ -2,7 +2,7 @@ import SwiftUI
 import ApplicationServices
 
 struct ContentView: View {
-    @StateObject private var session = SessionManager()
+    @ObservedObject var session: SessionManager
     @State private var accessibilityGranted = AXIsProcessTrusted()
     @State private var pollTimer: Timer?
     @State private var waitingForUser = false
@@ -124,10 +124,6 @@ struct ContentView: View {
 
             activeAppView
 
-            if session.isDistracted {
-                distractionBanner
-            }
-
             Button("End Session") {
                 session.end()
             }
@@ -159,37 +155,6 @@ struct ContentView: View {
         }
     }
 
-    // MARK: - Distraction banner
-
-    private var distractionBanner: some View {
-        VStack(spacing: 8) {
-            Text("You've been in \(session.distractionAppName) for 30s")
-                .font(.subheadline)
-                .fontWeight(.medium)
-            Text("Is this related to \"\(session.task)\"?")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-            HStack(spacing: 12) {
-                Button("Yes, it is") {
-                    session.answerDistraction(related: true)
-                }
-                .buttonStyle(.bordered)
-                Button("No, going back") {
-                    session.answerDistraction(related: false)
-                }
-                .buttonStyle(.borderedProminent)
-            }
-        }
-        .padding(12)
-        .frame(maxWidth: .infinity)
-        .background(.orange.opacity(0.1))
-        .clipShape(RoundedRectangle(cornerRadius: 10))
-        .overlay(
-            RoundedRectangle(cornerRadius: 10)
-                .strokeBorder(.orange.opacity(0.3), lineWidth: 1)
-        )
-    }
-
     // MARK: - Ended
 
     private var endedView: some View {
@@ -217,7 +182,6 @@ struct ContentView: View {
     // MARK: - Permission logic
 
     private func triggerAccessibilityPrompt() {
-        // Registers the app in the Accessibility list (prompt won't show in sandbox, but registration happens)
         let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
         AXIsProcessTrustedWithOptions(options)
         waitingForUser = true

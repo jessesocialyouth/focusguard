@@ -11,6 +11,8 @@
 		FG0008 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FG0003 /* ContentView.swift */; };
 		FG0009 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FG0004 /* SessionManager.swift */; };
 		FG0010 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FG0005 /* Assets.xcassets */; };
+		FG0026 /* MenuBarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FG0024 /* MenuBarManager.swift */; };
+		FG0027 /* DistractionPopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FG0025 /* DistractionPopoverView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +22,8 @@
 		FG0005 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FG0006 /* FocusGuard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FocusGuard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FG0023 /* FocusGuard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FocusGuard.entitlements; sourceTree = "<group>"; };
+		FG0024 /* MenuBarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarManager.swift; sourceTree = "<group>"; };
+		FG0025 /* DistractionPopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistractionPopoverView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -39,6 +43,8 @@
 				FG0004 /* SessionManager.swift */,
 				FG0005 /* Assets.xcassets */,
 				FG0023 /* FocusGuard.entitlements */,
+				FG0024 /* MenuBarManager.swift */,
+				FG0025 /* DistractionPopoverView.swift */,
 			);
 			path = FocusGuard;
 			sourceTree = "<group>";
@@ -122,6 +128,8 @@
 				FG0007 /* FocusGuardApp.swift in Sources */,
 				FG0008 /* ContentView.swift in Sources */,
 				FG0009 /* SessionManager.swift in Sources */,
+				FG0026 /* MenuBarManager.swift in Sources */,
+				FG0027 /* DistractionPopoverView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
