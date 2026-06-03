@@ -132,7 +132,7 @@ struct ContentView: View {
     }
 
     private var activeAppView: some View {
-        VStack(spacing: 4) {
+        VStack(spacing: 6) {
             if session.activeAppName.isEmpty {
                 Text("Watching for app switches…")
                     .foregroundStyle(.secondary)
@@ -143,6 +143,9 @@ struct ContentView: View {
                         .foregroundStyle(.secondary)
                     Text(session.activeAppName)
                         .fontWeight(.medium)
+                    if let classification = session.activeContext?.classification {
+                        ClassificationBadge(result: classification)
+                    }
                 }
                 let detail = session.activeContext?.displayDetail ?? ""
                 if !detail.isEmpty {
@@ -153,6 +156,23 @@ struct ContentView: View {
                         .truncationMode(.middle)
                 }
             }
+        }
+    }
+
+    // MARK: - Classification badge
+
+    struct ClassificationBadge: View {
+        let result: ClassificationResult
+
+        var body: some View {
+            Text(result.label)
+                .font(.caption2)
+                .fontWeight(.medium)
+                .padding(.horizontal, 6)
+                .padding(.vertical, 2)
+                .background(result.badgeColor.opacity(0.15))
+                .foregroundStyle(result.badgeColor)
+                .clipShape(Capsule())
         }
     }
 

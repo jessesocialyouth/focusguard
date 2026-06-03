@@ -15,6 +15,9 @@
 		FG0027 /* DistractionPopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FG0025 /* DistractionPopoverView.swift */; };
 		FG0029 /* ActivityContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = FG0028 /* ActivityContext.swift */; };
 		FG0031 /* BrowserURLReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FG0030 /* BrowserURLReader.swift */; };
+		FG0033 /* ClaudeClassifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = FG0032 /* ClaudeClassifier.swift */; };
+		FG0035 /* UsageTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FG0034 /* UsageTracker.swift */; };
+		FG0037 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = FG0036 /* Secrets.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +31,9 @@
 		FG0025 /* DistractionPopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistractionPopoverView.swift; sourceTree = "<group>"; };
 		FG0028 /* ActivityContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityContext.swift; sourceTree = "<group>"; };
 		FG0030 /* BrowserURLReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserURLReader.swift; sourceTree = "<group>"; };
+		FG0032 /* ClaudeClassifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeClassifier.swift; sourceTree = "<group>"; };
+		FG0034 /* UsageTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageTracker.swift; sourceTree = "<group>"; };
+		FG0036 /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -51,6 +57,9 @@
 				FG0025 /* DistractionPopoverView.swift */,
 				FG0028 /* ActivityContext.swift */,
 				FG0030 /* BrowserURLReader.swift */,
+				FG0032 /* ClaudeClassifier.swift */,
+				FG0034 /* UsageTracker.swift */,
+				FG0036 /* Secrets.swift */,
 			);
 			path = FocusGuard;
 			sourceTree = "<group>";
@@ -138,6 +147,9 @@
 				FG0027 /* DistractionPopoverView.swift in Sources */,
 				FG0029 /* ActivityContext.swift in Sources */,
 				FG0031 /* BrowserURLReader.swift in Sources */,
+				FG0033 /* ClaudeClassifier.swift in Sources */,
+				FG0035 /* UsageTracker.swift in Sources */,
+				FG0037 /* Secrets.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

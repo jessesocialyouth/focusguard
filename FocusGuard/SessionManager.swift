@@ -26,6 +26,7 @@ class SessionManager: ObservableObject {
 
     private var sessionTimer: Timer?
     private var distractionTimer: Timer?
+    private var classifyTimer: Timer?
     private var appObserver: NSObjectProtocol?
 
     static let distractionGrace: TimeInterval = 30
@@ -56,6 +57,8 @@ class SessionManager: ObservableObject {
         sessionTimer = nil
         distractionTimer?.invalidate()
         distractionTimer = nil
+        classifyTimer?.invalidate()
+        classifyTimer = nil
         stopAppTracking()
         isDistracted = false
         state = .ended
@@ -130,6 +133,33 @@ class SessionManager: ObservableObject {
             cancelDistractionTimer()
         } else if !isDistracted {
             startDistractionTimer(context: activeContext!)
+        }
+
+        scheduleClassification()
+    }
+
+    // MARK: - Classification
+
+    private func scheduleClassification() {
+        classifyTimer?.invalidate()
+        guard state == .running, let ctx = activeContext else { return }
+        // Classify after 10s of stable context
+        classifyTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: false) { [weak self] _ in
+            self?.runClassification(for: ctx)
+        }
+    }
+
+    private func runClassification(for snapshot: ActivityContext) {
+        let currentTask = task
+        Task {
+            guard let result = await ClaudeClassifier.shared.classify(context: snapshot, task: currentTask) else { return }
+            await MainActor.run {
+                guard var ctx = self.activeContext,
+                      ctx.bundleID == snapshot.bundleID,
+                      ctx.url == snapshot.url else { return }
+                ctx.classification = result
+                self.activeContext = ctx
+            }
         }
     }
 
